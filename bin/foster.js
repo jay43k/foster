@@ -669,14 +669,18 @@ class AtlasReaders {
             var name = path.replace(".ase", "").replace(".png", "");
             var obj = frames[path];
             var bounds = obj.frame;
+            var tex;
             if (obj.trimmed) {
                 var source = obj["spriteSourceSize"];
                 var size = obj["sourceSize"];
-                into.subtextures[name] = new Texture(into.texture.texture, new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h), new Rectangle(-source.x, -source.y, size.w, size.h));
+                tex = new Texture(into.texture.texture, new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h), new Rectangle(-source.x, -source.y, size.w, size.h));
             }
             else {
-                into.subtextures[name] = new Texture(into.texture.texture, new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h));
+                tex = new Texture(into.texture.texture, new Rectangle(bounds.x, bounds.y, bounds.w, bounds.h));
             }
+            if (obj.duration != undefined)
+                tex.metadata["duration"] = parseInt(obj.duration);
+            into.subtextures[name] = tex;
         }
     }
 }
@@ -786,6 +790,10 @@ class Texture {
          * A reference to the full WebGL Texture
          */
         this.texture = null;
+        /**
+         * Metadata attached to this texture
+         */
+        this.metadata = {};
         this.texture = texture;
         this.bounds = bounds || new Rectangle(0, 0, texture.width, texture.height);
         this.frame = frame || new Rectangle(0, 0, this.bounds.width, this.bounds.height);

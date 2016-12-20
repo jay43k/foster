@@ -418,6 +418,12 @@ declare class Texture {
      */
     center: Vector;
     /**
+     * Metadata attached to this texture
+     */
+    metadata: {
+        [path: string]: any;
+    };
+    /**
      * The width of the Texture when rendered (frame.width)
      */
     readonly width: number;
